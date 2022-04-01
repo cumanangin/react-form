@@ -2,8 +2,8 @@ import React, { useState, useRef } from "react";
 
 const Form = () => {
   const nameRegex = /^[A-Za-z]*$/;
-  const emailRegex = /[a-zA-Z0-9_\-\.]+[@][a-z]+[\.][a-z]]*$/;
-  const phoneRegex = /^ [0-9]*$/;
+  const emailRegex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const phoneRegex = /^[0-9]{9,14}/;
 
   const handleChange = e => {
 /*     if(data.nama === [e.target.name]){*/      
@@ -21,7 +21,9 @@ const Form = () => {
         setErrorMassage({nama : "nama lengkap harus berupa huruf"});
       }
       /* e.preventDefault(); */
-    }else if([e.target.name ] == "email"){
+    }
+    
+    if([e.target.name ] == "email"){
       if(emailRegex.test(e.target.value)){
         setErrorMassage("");
       } else
@@ -29,7 +31,8 @@ const Form = () => {
         setErrorMassage({email : "email tidak sesuai"});
       }
     }
-    else if([e.target.name] == "phone"){
+    
+    if([e.target.name] == "phone"){
       if(phoneRegex.test(e.target.value)){
         setErrorMassage("");
       } else
@@ -40,13 +43,17 @@ const Form = () => {
   }
 
    const handleSubmit = (e) => {
-    if(errorMassage !== ""){
+    if(errorMassage.nama !== "" && errorMassage.email !== "" && errorMassage !== ""){
       alert("Terdapat data yang tidak sesuai")
     }
     else{
       alert(`Data peserta "${data.nama}" diterima !`)
     }
     e.preventDefault();
+  }
+
+  const handleReset = () => {
+    setData(baseData), setErrorMassage("");
   }
 
   const baseData = {
@@ -71,8 +78,7 @@ const Form = () => {
 
   return (
     <div className="bg-pacific-blue-500 my-4 h-full rounded-3xl">
-{/*       <button onClick={handleChange}>click me</button>
- */}      <div className="flex justify-center">
+      <div className="flex justify-center">
         <div className="bg-lochmara2-500 w-1/2 mt-2 rounded-full">
           <h2 className="sm:text-xs md:text-sm font-bold lg:flex justify-center text-lg py-3">
             Pendaftaran Peserta Coding Bootcamp
@@ -136,15 +142,15 @@ const Form = () => {
             className="my-2"
             type="radio"
             name="background" 
-            value={"IT"}
-            /* onChange={handleChange} */
+            value="IT"
+            onChange={handleChange}
           />
           <span className="pl-2">IT</span>
           <input
             className="my-2 ml-5"
             type="radio"
             name="background" 
-            value={"Non-IT"}
+            value="NonIT"
           />
           <span className="pl-2">Non-IT</span>
           <br />
@@ -156,12 +162,14 @@ const Form = () => {
           <select
             className="my-2 rounded-3xl h-7 "
             name="program"
-            id="program" /*  value={initialValue.program} */
+            id="program" 
+            value={baseData.program}
+            onChange={handleChange} 
           >
-            <option value="default">-- Pilih Salah Satu Program --</option>
-            <option value="go">Coding Backend with Golang</option>
-            <option value="react">Coding Frontend with ReactJS</option>
-            <option value="fullstack">Fullstack Developer</option>
+            <option value="">-- Pilih Salah Satu Program --</option>
+            <option value="Coding Backend with Golang">Coding Backend with Golang</option>
+            <option value="Coding Frontend with ReactJS">Coding Frontend with ReactJS</option>
+            <option value="Fullstack Developer">Fullstack Developer</option>
           </select>
           <br />
           </label>
